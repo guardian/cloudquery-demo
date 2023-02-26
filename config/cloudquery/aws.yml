@@ -1,0 +1,21 @@
+# https://www.cloudquery.io/docs/plugins/sources/aws/overview
+kind: source
+spec:
+  name: "aws"
+  path: "cloudquery/aws"
+  version: "v15.2.0"
+  destinations:
+    - "elasticsearch"
+  spec:
+    # https://github.com/guardian/infosec-platform/blob/main/policies/DenyAccessToNonApprovedRegions.json
+    regions:
+      - "eu-west-1"
+      - "eu-west-2"
+      - "us-east-1"
+      - "us-east-2"
+      - "us-west-1"
+      - "ap-southeast-2"
+      - "ca-central-1"
+    accounts:
+      - id: "developerPlayground"
+        local_profile: "developerPlayground"

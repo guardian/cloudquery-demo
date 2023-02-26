@@ -1,0 +1,10 @@
+# https://www.cloudquery.io/docs/plugins/sources/snyk/configuration
+kind: source
+spec:
+  name: "snyk"
+  path: "cloudquery/snyk"
+  version: "v1.1.7"
+  destinations:
+    - "elasticsearch"
+  spec:
+    api_key: ${SNYK_TOKEN}

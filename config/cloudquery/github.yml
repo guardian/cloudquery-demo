@@ -1,0 +1,16 @@
+# https://www.cloudquery.io/docs/plugins/sources/github/overview
+kind: source
+spec:
+  name: "github"
+  path: "cloudquery/github"
+  version: "v4.0.0"
+  destinations:
+    - "elasticsearch"
+  spec:
+    access_token: ${GITHUB_ACCESS_TOKEN}
+    orgs:
+      - "guardian"
+  # Attempt to avoid GitHub API rate limiting
+  # https://www.cloudquery.io/docs/advanced-topics/rate-limiting
+  # https://www.cloudquery.io/docs/reference/source-spec#concurrency
+  concurrency: 500

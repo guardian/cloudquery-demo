@@ -1,0 +1,55 @@
+version: '3.9'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    volumes:
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - elasticsearch:/usr/share/elasticsearch/data
+    expose:
+      - 9200
+    environment:
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
+    volumes:
+      - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+  cq_aws:
+    image: ghcr.io/cloudquery/cloudquery:latest
+    platform: linux/amd64
+    volumes:
+      - ./config/cloudquery/destination.yml:/cq-config/destination.yml
+      - ./config/cloudquery/aws.yml:/cq-config/source.yml
+      - ~/.aws/credentials:/.aws/credentials
+    depends_on:
+      - elasticsearch
+    environment:
+      AWS_SHARED_CREDENTIALS_FILE: "/.aws/credentials"
+    command: sync /cq-config/source.yml /cq-config/destination.yml --log-console --log-level warn
+  cq_github:
+    image: ghcr.io/cloudquery/cloudquery:latest
+    platform: linux/amd64
+    volumes:
+      - ./config/cloudquery/destination.yml:/cq-config/destination.yml
+      - ./config/cloudquery/github.yml:/cq-config/source.yml
+    depends_on:
+      - elasticsearch
+    environment:
+      GITHUB_ACCESS_TOKEN: $GITHUB_ACCESS_TOKEN
+    command: sync /cq-config/source.yml /cq-config/destination.yml --log-console --log-level warn
+  cq_snyk:
+    image: ghcr.io/cloudquery/cloudquery:latest
+    platform: linux/amd64
+    volumes:
+      - ./config/cloudquery/destination.yml:/cq-config/destination.yml
+      - ./config/cloudquery/snyk.yml:/cq-config/source.yml
+    depends_on:
+      - elasticsearch
+    environment:
+      SNYK_TOKEN: $SNYK_TOKEN
+    command: sync /cq-config/source.yml /cq-config/destination.yml --log-console --log-level warn
+volumes:
+  elasticsearch:

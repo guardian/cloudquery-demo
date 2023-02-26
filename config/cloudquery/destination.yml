@@ -1,0 +1,10 @@
+# https://www.cloudquery.io/docs/plugins/destinations/elasticsearch/overview
+kind: destination
+spec:
+  name: "elasticsearch"
+  path: "cloudquery/elasticsearch"
+  version: "v1.1.0"
+  write_mode: "append"
+  spec:
+    addresses:
+      - "http://elasticsearch:9200"
