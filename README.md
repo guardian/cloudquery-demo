@@ -1,3 +1,6 @@
+> **Note**
+> This repository has been archived, in favour of https://github.com/guardian/service-catalogue.
+
 # CloudQuery Demo
 Experimenting with [CloudQuery](https://www.cloudquery.io/).
 
